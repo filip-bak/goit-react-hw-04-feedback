@@ -6,21 +6,27 @@ import Statistics from './Statistics';
 import Notification from './Notification';
 
 export const App = () => {
-  const [feedback, setFeedback] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  });
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const feedback = {
+    good,
+    neutral,
+    bad,
+  };
 
   const handleFeedbackState = name => {
-    setFeedback(state => ({
-      ...state,
-      [name]: state[name] + 1,
-    }));
+    if (name === 'good') setGood(state => state + 1);
+    if (name === 'neutral') setNeutral(state => state + 1);
+    if (name === 'bad') setBad(state => state + 1);
+    // setFeedback(state => ({
+    //   ...state,
+    //   [name]: state[name] + 1,
+    // }));
   };
 
   const handleEmptyFeedback = () => {
-    const { good, neutral, bad } = feedback;
     if (good === 0 && neutral === 0 && bad === 0) {
       return false;
     } else {
@@ -28,13 +34,12 @@ export const App = () => {
     }
   };
   const countTotalFeedback = () => {
-    return Object.values(feedback).reduce((acc, value) => {
+    return [good, neutral, bad].reduce((acc, value) => {
       return acc + value;
     }, 0);
   };
 
   const countPositiveFeedbackPercentage = () => {
-    const { good } = feedback;
     const value =
       Math.round(((good * 100) / countTotalFeedback()).toFixed(0)) || 0;
 
